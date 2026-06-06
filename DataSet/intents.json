@@ -1,0 +1,636 @@
+{
+  "intents": [
+    {
+  "tag": "greeting",
+  "patterns": [
+    "hi",
+  "hello",
+  "hey",
+  "hii",
+  "helloo",
+  "heyy",
+
+  "good morning",
+  "good afternoon",
+  "good evening",
+
+  "how are you",
+  "what's up"
+  ],
+  "responses": [
+    "Hello! Welcome to SARA Smart Campus Assistant. How can I help you?",
+    "Hi there! Ask me anything about admissions, courses, placements or campus facilities.",
+    "Hello! I’m your SCE AI Assistant. What would you like to know?",
+    "Hey! I'm here to help you with college information."
+  ]
+},
+    {
+  "tag": "goodbye",
+  "patterns": [
+    "bye",
+    "goodbye",
+    "bye bye",
+
+    "see you",
+    "see you later",
+    "see ya",
+
+    "talk to you later",
+    "catch you later",
+
+    "good night",
+
+    "exit",
+    "quit",
+    "end chat",
+    "close chat",
+
+    "i am leaving",
+    "i am done",
+
+    "bye bot",
+    "thanks bye",
+    "ok bye"
+  ],
+  "responses": [
+    "Goodbye! Have a great day 👋",
+    "See you later! Feel free to come back anytime.",
+    "Bye! I'm here whenever you need help.",
+    "Take care! Come back soon 😊"
+  ]
+},
+    {
+  "tag": "creator",
+  "patterns": [
+    "who created you",
+    "who made you",
+    "who developed you",
+
+    "who is your creator",
+    "who built this chatbot",
+    "who made this bot",
+
+    "who developed this chatbot",
+    "who created this assistant",
+    "who programmed you",
+
+    "your developer",
+    "your creator",
+    "who built you",
+
+    "who made this project",
+    "who developed this project"
+  ],
+  "responses": [
+    "This chatbot was developed by students of Saranathan College of Engineering as a college enquiry assistant project.\n\nTeam Members: Aravinthan B, Gabelo Marian S, Kabilan M."
+  ]
+},
+    {
+  "tag": "name",
+  "patterns": [
+    "what is your name",
+    "your name",
+    "tell me your name",
+    "bot name",
+    "assistant name",
+
+    "who are you",
+    "who is this bot",
+    "who am i chatting with",
+    "who am i talking to",
+
+    "introduce yourself",
+    "what are you called",
+    "what should i call you",
+
+    "your identity",
+    "what is your identity"
+  ],
+  "responses": [
+    "I am the SCE AI Assistant, your college enquiry chatbot.",
+    "You can call me the Saranathan College AI Assistant. I'm here to help you with college information."
+  ]
+},
+    {
+  "tag": "about",
+  "patterns": [
+    "about the college",
+    "college information",
+    "college details",
+
+    "tell me about the college",
+    "give me info about college",
+    "college overview",
+    "describe the college",
+
+    "what is this college",
+    "what is sce",
+    "what is saranathan college",
+
+    "about sce",
+    "about sce college",
+    "information about sce",
+
+    "college background",
+    "history of the college",
+    "brief about the college"
+  ],
+  "responses": [
+    "Saranathan College of Engineering (SCE) is a well-known engineering college located in Tiruchirappalli, Tamil Nadu. It was established in 1998 and is affiliated with Anna University and approved by AICTE. The college provides quality technical education with modern infrastructure and strong placement support.",
+    "Saranathan College of Engineering (SCE), founded in 1998, is a premier autonomous institution in Tiruchirappalli. It is affiliated with Anna University, approved by AICTE, and offers quality education with excellent infrastructure and placement opportunities."
+  ]
+},
+    {
+  "tag": "courses",
+  "patterns": [
+    "courses",
+    "course",
+
+    "what courses are offered",
+    "list of courses",
+    "courses available",
+
+    "what can i study",
+    "what can i study here",
+    "what courses are available",
+
+    "available programs",
+    "what programs do you offer",
+    "academic programs",
+
+    "ug courses",
+    "pg courses",
+    "undergraduate courses",
+    "postgraduate courses",
+
+    "engineering courses",
+    "courses in this college",
+
+    "cse course",
+    "it course",
+    "ece course",
+
+    "which course is available",
+    "what to study here"
+  ],
+  "responses": [
+    "Saranathan College of Engineering offers both undergraduate and postgraduate programs.\n\nUG Courses (4 years):\n• CSE, IT, ECE\n• EEE, Mechanical, Civil\n• AI & DS, AI & ML, CSBS\n\nPG Courses (2 years):\n• M.E specializations\n• MBA\n\nAdmissions are based on TNEA counselling."
+  ]
+},
+
+
+
+
+        {
+  "tag": "fees_overview",
+  "patterns": [
+    "fees",
+  "fee",
+  "fees details",
+  "college fees",
+  "fee structure",
+  "how much fees",
+  "how much is the fee",
+  "tuition fee",
+  "course fees"
+  ],
+  "responses": [
+    "The fee structure at Saranathan College of Engineering depends on the admission category.\n\n• Government Quota (TNEA): ₹50,000 – ₹65,000 per year\n• Management Quota: ₹80,000 – ₹1,20,000 per year\n\nAdditional charges may vary based on course and category."
+  ]
+},
+
+        {
+  "tag": "scholarships",
+  "patterns": [
+    "scholarship",
+    "scholarships",
+
+    "scholarships available",
+    "any scholarship available",
+    "are there any scholarships",
+
+    "financial aid",
+    "education support",
+    "education assistance",
+
+    "fee concession",
+    "student financial help",
+
+    "scholarship details",
+    "scholarship eligibility",
+    "who can get scholarship",
+    "can i get scholarship",
+
+    "merit scholarship",
+    "government scholarship",
+    "first graduate scholarship",
+
+    "college scholarship options",
+    "how to apply for scholarship"
+  ],
+  "responses": [
+    "Yes, students can avail various scholarships such as:\n\n• Government Scholarships (SC/ST, BC/MBC)\n• First Graduate Scholarship\n• Merit-based scholarships\n\nEligibility depends on government norms and student category."
+  ]
+},
+
+    {
+  "tag": "hostel",
+  "patterns": [
+    "hostel",
+    "hostel facility",
+    "hostel facilities",
+
+    "hostel details",
+    "hostel information",
+    "college hostel",
+
+    "is hostel available",
+    "does college provide hostel",
+    "hostel availability",
+
+    "hostel fees",
+    "hostel cost",
+
+    "hostel food",
+    "hostel mess",
+
+    "boys hostel",
+    "girls hostel",
+
+    "hostel location",
+    "where is hostel located",
+
+    "distance between hostel and college",
+    "how far is hostel from college",
+
+    "how to apply for hostel",
+    "hostel admission",
+
+    "hostel rooms",
+    "hostel capacity",
+
+    "student accommodation",
+    "stay in college"
+  ],
+  "responses": [
+    "• Boys Hostel: Located on campus with shared rooms.\n• Girls Hostel: Located 6 km away with free transport.\n• Facilities: Clean rooms, water, electricity, and security.\n• Food: Hygienic vegetarian meals are provided.\n• Fees: Approximately ₹80,000–₹90,000 per year."
+  ]
+},
+
+
+    {
+  "tag": "syllabus",
+  "patterns": [
+    "syllabus",
+    "syllabus details",
+    "course syllabus",
+
+    "engineering syllabus",
+    "academic syllabus",
+
+    "subjects in first year",
+    "first year subjects",
+    "what subjects in first year engineering",
+
+    "subjects in cse",
+    "subjects in it",
+    "subjects in engineering",
+
+    "semester subjects",
+    "course subjects",
+    "subject list",
+
+    "course curriculum",
+    "curriculum details",
+    "course structure",
+
+    "what will i study",
+    "what do we study in engineering"
+  ],
+  "responses": [
+    "In the first year, all engineering branches follow a common curriculum including:\n\n• Engineering Mathematics I & II\n• Engineering Physics\n• Engineering Chemistry\n• Engineering Mechanics\n• Basic Electrical & Electronics Engineering\n• Engineering Graphics\n• Programming and Problem Solving\n\nFrom the second year onwards, subjects are based on the chosen department."
+  ]
+},
+    {
+  "tag": "canteen",
+  "patterns": [
+    "canteen",
+    "canteen facility",
+    "canteen facilities",
+
+    "college canteen",
+    "canteen details",
+    "canteen information",
+
+    "is there a canteen",
+    "canteen availability",
+
+    "cafeteria",
+    "college cafeteria",
+
+    "canteen food",
+    "food in canteen",
+    "canteen menu",
+    "food menu",
+
+    "what food is available",
+    "snacks in canteen",
+    "meal options",
+
+    "canteen hygiene",
+    "canteen services"
+  ],
+  "responses": [
+    "The campus has a hygienic canteen providing South Indian meals, snacks, tea, and beverages at affordable prices."
+  ]
+},
+
+        {
+  "tag": "placement",
+  "patterns": [
+    "placement",
+    "placements",
+
+    "placement details",
+    "placement information",
+    "placement overview",
+
+    "how is placement",
+    "how is placement in college",
+    "how are placements in sce",
+
+    "campus placement",
+    "placement record",
+    "placement performance",
+
+    "placement percentage",
+    "placement rate",
+    "how many students get placed",
+
+    "highest package",
+    "highest salary",
+    "maximum package",
+
+    "average package",
+    "average salary",
+
+    "top recruiters",
+    "companies visiting campus",
+    "placement companies",
+
+    "placement training",
+    "training for placement",
+    "placement preparation"
+  ],
+  "responses": [
+    "Saranathan College of Engineering has a strong placement record (around 75–85%).\n\n• Highest Package: ₹8–15 LPA\n• Average Package: ₹4–6 LPA\n\nTop recruiters include TCS, Infosys, Cognizant, Wipro, HCL, and Zoho.\n\nThe Training and Placement Cell provides aptitude training, technical skills, soft skills, resume building, and mock interviews."
+  ]
+},
+
+    {
+  "tag": "principal",
+  "patterns": [
+    "principal",
+    "college principal",
+
+    "who is the principal",
+    "name of the principal",
+    "principal name",
+
+    "who is principal of sce",
+    "principal of saranathan college",
+
+    "current principal",
+    "principal details",
+    "principal information",
+
+    "tell me about the principal",
+    "principal profile"
+  ],
+  "responses": [
+    "The Principal of Saranathan College of Engineering is Dr. D. Valavan, M.Tech., Ph.D."
+  ]
+},
+
+
+
+    {
+  "tag": "cutoff",
+  "patterns": [
+    "cutoff",
+    "cutoff marks",
+
+    "tnea cutoff",
+    "tnea cutoff marks",
+
+    "cutoff for college",
+    "cutoff for sce",
+
+    "cutoff details",
+    "expected cutoff",
+
+    "cutoff for admission",
+    "cutoff range",
+
+    "what is the cutoff",
+    "required cutoff marks"
+  ],
+  "responses": [
+    "Approximate cutoff ranges:\n• CSE: 180+\n• IT: 175+\n• ECE: 170+\n• EEE: 165+\n• Mechanical: 160+\n• Civil: 155+\n\nCutoffs vary every year based on TNEA counselling."
+  ]
+},
+
+   {
+  "tag": "admission_process",
+  "patterns": [
+    "admission process",
+    "admission procedure",
+
+    "how to apply",
+    "how to apply for admission",
+
+    "application process",
+    "application steps",
+
+    "steps for admission",
+    "step by step admission",
+
+    "how to join college",
+    "how to join engineering college",
+
+    "how admission works",
+    "college admission procedure",
+
+    "tnea admission process",
+    "how to apply through tnea",
+
+    "admission steps"
+  ],
+  "responses": [
+    "Admission process:\n1. Register on TNEA website\n2. Fill application details\n3. Upload documents\n4. Attend counselling\n5. Choose SCE based on cutoff\n6. Confirm seat allotment"
+  ]
+},
+
+
+
+
+
+    {
+  "tag": "eligibility_criteria",
+  "patterns": [
+    "eligibility",
+    "eligibility criteria",
+
+    "who can apply",
+    "who is eligible",
+
+    "eligibility for engineering",
+    "eligibility for admission",
+
+    "qualification for admission",
+    "required qualification",
+
+    "who can join engineering",
+    "who can study engineering",
+
+    "can i apply after 12th",
+    "can diploma students apply"
+  ],
+  "responses": [
+    "To be eligible for undergraduate engineering programs, candidates must have completed 12th standard with Physics, Chemistry, and Mathematics.\n\nAdmissions are based on TNEA counselling using these marks."
+  ]
+},
+
+    {
+  "tag": "transport",
+  "patterns": [
+    "transport",
+    "transport facility",
+    "transport facilities",
+
+    "college bus",
+    "bus facility",
+    "bus service",
+
+    "bus routes",
+    "college bus routes",
+
+    "bus availability",
+    "college transport",
+
+    "student transport",
+    "transport service",
+
+    "bus services in college"
+  ],
+  "responses": [
+    "The college provides bus facilities covering various routes in and around Tiruchirappalli for safe and convenient student transport."
+  ]
+},
+   {
+  "tag": "hod",
+  "patterns": [
+    "hod",
+    "hod details",
+
+    "head of department",
+    "department head",
+
+    "who is hod",
+    "hod name",
+    "hod list",
+
+    "who are hods",
+    "department hod",
+
+    "who is hod of cse",
+    "who is hod of it",
+    "who is hod of ece",
+
+    "cse hod",
+    "it hod",
+    "ece hod"
+  ],
+  "responses": [
+    "Heads of Departments:\n\n• CSE: Dr. V. Punitha\n• IT: Dr. R. Thillaikarasi\n• AI & DS: Dr. S. Ravimaran\n• AI & ML: Dr. A. Delphin Carolina Rani\n• CSBS: Dr. S. Venkatasubramanian\n• ECE: Dr. M. Santhi\n• EEE: Dr. C. Krishnakumar\n• IC: Dr. M. Shanmugavalli\n• Civil: Dr. A. Belin Jude\n• Mechanical: Dr. R. Rekha\n• MBA: Dr. K. Karthikeyan"
+  ]
+},
+
+   {
+  "tag": "faculty",
+  "patterns": [
+    "faculty",
+    "faculty details",
+
+    "staff",
+    "staff details",
+
+    "teaching staff",
+    "college teachers",
+
+    "faculty members",
+    "faculty list",
+
+    "who are the faculty",
+    "who are teachers",
+
+    "professors in college",
+    "professors in sce",
+
+    "staff list",
+    "academic staff"
+  ],
+  "responses": [
+    "Saranathan College has qualified faculty including Professors, Associate Professors, and Assistant Professors across all departments."
+  ]
+},
+
+    {
+  "tag": "contact",
+  "patterns": [
+    "contact",
+    "contact details",
+
+    "phone number",
+    "contact number",
+    "college phone",
+
+    "email",
+    "email address",
+    "college email",
+
+    "website",
+    "college website",
+    "official website",
+
+    "address",
+    "college address",
+
+    "location",
+    "college location",
+    "where is the college",
+    "where is sce located",
+
+    "how to reach college",
+    "directions to college"
+  ],
+  "responses": [
+    "📞 Phone: 0431-2670267\n📧 Email: info@saranathan.ac.in\n🌐 Website: https://saranathan.ac.in\n📍 Address: Venkateswara Nagar, Panjappur, Tiruchirappalli – 620012, Tamil Nadu, India.\n\nYou can reach the college easily via road transport in Tiruchirappalli."
+  ]
+},
+    {
+  "tag": "fallback",
+  "patterns": [
+    "random text",
+    "i dont understand",
+    "unknown query"
+  ],
+  "responses": [
+    "Sorry, I didn't understand that. Can you rephrase?",
+    "Please ask something related to college information."
+  ]
+}
+
+    ]
+
+}

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .fixed-panel {
+            min-height: 400px;
+            max-height: 400px;
+            background-color: #19313c;
+            color: white;
+            overflow: auto;
+        }
+
+        .panel {
+            border-radius: 25px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #608f95, #1a1e3b);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center text-white">ChatBot</h3>
+
+        <div class="col-md-4 col-md-offset-4">
+            <div id="chatPanel" class="panel panel-info">
+
+                <div class="panel-heading">
+                    Talk with Me (You: Green / Bot: White)
+                </div>
+
+                <div class="panel-body fixed-panel">
+                    <ul class="media-list"></ul>
+                </div>
+
+                <div class="panel-footer">
+
+                    <!-- LANGUAGE SELECT -->
+                    <select id="languageSelect" class="form-control">
+                        <option value="en-US">English</option>
+                        <option value="ta-IN">Tamil</option>
+                        <option value="hi-IN">Hindi</option>
+                    </select>
+                    <br>
+
+                    <form method="post" id="chatbot-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter Message"
+                                name="messageText" id="messageText" autofocus />
+
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button" id="sendBtn">Send</button>
+                                <button class="btn btn-info" type="button" id="voiceBtn">Voice</button>
+                                <button class="btn btn-info" type="button" id="clearBtn">Clear</button>
+                            </span>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+
+            var synth = window.speechSynthesis;
+            var currentAudio = null;
+
+            // ==========================
+            // SPEAK TEXT FUNCTION
+            // Tamil/Hindi → gTTS (backend MP3)
+            // English    → Browser TTS
+            // ==========================
+            function speakText(text, lang, audioBase64) {
+
+                // Stop any ongoing speech
+                synth.cancel();
+
+                // Stop previous audio if playing
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+
+                if (lang === "ta-IN" || lang === "hi-IN") {
+
+                    // 🔥 Tamil / Hindi — play MP3 from backend gTTS
+                    // No system voice needed — works always!
+                    if (audioBase64) {
+                        currentAudio = new Audio("data:audio/mp3;base64," + audioBase64);
+                        currentAudio.play();
+                    }
+
+                } else {
+
+                    // 🔊 English — use browser TTS as normal
+                    var cleanText = text
+                        .replace(/\n/g, ' ')
+                        .replace(/\s+/g, ' ')
+                        .trim();
+
+                    var sentences = cleanText.match(/[^.!?]+[.!?]*/g) || [cleanText];
+
+                    sentences.forEach(function (sentence) {
+                        if (sentence.trim() === '') return;
+
+                        const msg = new SpeechSynthesisUtterance();
+                        const voices = synth.getVoices();
+                        let selectedVoice = voices.find(v => v.lang.includes("en"));
+
+                        msg.voice = selectedVoice || voices[0];
+                        msg.lang = "en-US";
+                        msg.rate = 0.85;
+                        msg.pitch = 1;
+                        msg.text = sentence.trim();
+
+                        synth.speak(msg);
+                    });
+                }
+            }
+
+            // Voices preload
+            window.speechSynthesis.onvoiceschanged = function () {
+                synth.getVoices();
+            };
+
+            // ==========================
+            // SEND BUTTON
+            // ==========================
+            $('#sendBtn').click(function () {
+                $('#chatbot-form').submit();
+            });
+
+            // ==========================
+            // CLEAR BUTTON
+            // ==========================
+            $('#clearBtn').click(function () {
+                $('.media-list').html('');
+                synth.cancel();
+                if (currentAudio) {
+                    currentAudio.pause();
+                    currentAudio = null;
+                }
+            });
+
+            // ==========================
+            // VOICE INPUT BUTTON
+            // ==========================
+            $('#voiceBtn').click(function () {
+
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+                let selectedLang = document.getElementById("languageSelect").value;
+
+                recognition.lang = selectedLang;
+                recognition.interimResults = false;
+                recognition.continuous = false;
+
+                recognition.onresult = function (event) {
+                    document.getElementById("messageText").value = event.results[0][0].transcript;
+                    $('#sendBtn').click();
+                };
+
+                recognition.onerror = function (event) {
+                    alert("Voice recognition error: " + event.error);
+                };
+
+                recognition.start();
+            });
+
+            // ==========================
+            // FORM SUBMIT
+            // ==========================
+            $('#chatbot-form').submit(function (e) {
+                e.preventDefault();
+
+                var message = $('#messageText').val().trim();
+                var selectedLang = document.getElementById("languageSelect").value;
+
+                if (message === '') return;
+
+                $(".media-list").append(
+                    `<li><div style="text-align:right; color:#2EFE2E">${message}<hr/></div></li>`
+                );
+
+                $('#messageText').val('');
+
+                $(".fixed-panel").animate({
+                    scrollTop: $(".fixed-panel")[0].scrollHeight
+                }, 300);
+
+                $.ajax({
+                    type: "POST",
+                    url: "/ask",
+                    data: { messageText: message, lang: selectedLang },
+
+                    success: function (response) {
+
+                        var answer = response.answer;
+                        var audioBase64 = response.audio || null; // 🔥 gTTS audio from backend
+
+                        $(".media-list").append(
+                            `<li><div style="color:white">${answer}<hr/></div></li>`
+                        );
+
+                        $(".fixed-panel").animate({
+                            scrollTop: $(".fixed-panel")[0].scrollHeight
+                        }, 500);
+
+                        // 🔥 speakText now uses gTTS for Tamil/Hindi
+                        speakText(answer, selectedLang, audioBase64);
+                    },
+
+                    error: function () {
+                        $(".media-list").append(
+                            `<li><div style="color:red">Error: Could not get response.<hr/></div></li>`
+                        );
+                    }
+                });
+            });
+
+            // ==========================
+            // ENTER KEY SUPPORT
+            // ==========================
+            $('#messageText').keypress(function (e) {
+                if (e.which === 13) {
+                    e.preventDefault();
+                    $('#chatbot-form').submit();
+                }
+            });
+
+        });
+    </script>
+
+</body>
+</html>

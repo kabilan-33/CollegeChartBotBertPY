@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Admin Dashboard</title>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        body {
+            font-family: Arial;
+            background: #0f172a;
+            color: white;
+            text-align: center;
+        }
+
+        .card {
+            display: inline-block;
+            padding: 20px;
+            margin: 20px;
+            background: #1e293b;
+            border-radius: 10px;
+            width: 200px;
+        }
+
+        h1 { color: #38bdf8; }
+    </style>
+</head>
+<body>
+
+<h1>Admin Dashboard</h1>
+
+<div class="card">
+    <h2>Total Users</h2>
+    <p>{{ users }}</p>
+</div>
+
+<div class="card">
+    <h2>Chat Sessions</h2>
+    <p>{{ sessions }}</p>
+</div>
+
+<div class="card">
+    <h2>Total Messages</h2>
+    <p>{{ messages }}</p>
+</div>
+
+<!-- 🔥 Chart Section -->
+<canvas id="myChart" width="400" height="200"></canvas>
+
+<script>
+    const ctx = document.getElementById('myChart');
+
+    new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ['Users', 'Sessions', 'Messages'],
+            datasets: [{
+                label: 'Analytics',
+                data: [{{ users }}, {{ sessions }}, {{ messages }}],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+</script>
+
+</body>
+</html>
