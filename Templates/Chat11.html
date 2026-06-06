@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html>
+
+<head lang="en">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chatbot</title>
+
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+    <style>
+        .fixed-panel {
+            min-height: 400px;
+            max-height: 400px;
+            background-color: #19313c;
+            color: white;
+            overflow: auto;
+        }
+
+        .panel {
+            border-radius: 25px;
+        }
+
+        body {
+            background: linear-gradient(135deg, #608f95, #1a1e3b);
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h3 class="text-center text-white">ChatBot</h3>
+
+        <div class="col-md-4 col-md-offset-4">
+            <div id="chatPanel" class="panel panel-info">
+
+                <div class="panel-heading">
+                    Talk with Me (You: Green / Bot: White)
+                </div>
+
+                <div class="panel-body fixed-panel">
+                    <ul class="media-list"></ul>
+                </div>
+
+                <div class="panel-footer">
+
+                    <!-- 🔥 LANGUAGE SELECT -->
+                    <select id="languageSelect" class="form-control">
+                        <option value="en-US">English</option>
+                        <option value="ta-IN">Tamil</option>
+                        <option value="hi-IN">Hindi</option>
+                    </select>
+                    <br>
+
+                    <form method="post" id="chatbot-form">
+                        <div class="input-group">
+                            <input type="text" class="form-control" placeholder="Enter Message"
+                                name="messageText" id="messageText" autofocus />
+
+                            <span class="input-group-btn">
+                                <button class="btn btn-info" type="button" id="sendBtn">Send</button>
+                                <button class="btn btn-info" type="button" id="voiceBtn">Voice</button>
+                                <button class="btn btn-info" type="button" id="clearBtn">Clear</button>
+                            </span>
+                        </div>
+                    </form>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        $(function () {
+
+            var synth = window.speechSynthesis;
+            var msg = new SpeechSynthesisUtterance();
+
+            // SEND BUTTON
+            $('#sendBtn').click(function () {
+                $('#chatbot-form').submit();
+            });
+
+            // CLEAR
+            $('#clearBtn').click(function () {
+                $('.media-list').html('');
+            });
+
+            // 🎤 VOICE INPUT
+            $('#voiceBtn').click(function () {
+
+                const recognition = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+                let selectedLang = document.getElementById("languageSelect").value;
+                recognition.lang = selectedLang;
+
+                recognition.onresult = function (event) {
+                    document.getElementById("messageText").value = event.results[0][0].transcript;
+                    $('#sendBtn').click();
+                };
+
+                recognition.start();
+            });
+
+            // FORM SUBMIT
+            $('#chatbot-form').submit(function (e) {
+                e.preventDefault();
+
+                var message = $('#messageText').val();
+
+                $(".media-list").append(
+                    `<li><div style="text-align:right; color:#2EFE2E">${message}<hr/></div></li>`
+                );
+
+                $.ajax({
+                    type: "POST",
+                    url: "/ask",
+                    data: $(this).serialize(),
+
+                    success: function (response) {
+
+                        $('#messageText').val('');
+                        var answer = response.answer;
+
+                        $(".media-list").append(
+                            `<li><div style="color:white">${answer}<hr/></div></li>`
+                        );
+
+                        $(".fixed-panel").animate({
+                            scrollTop: $(".fixed-panel")[0].scrollHeight
+                        }, 500);
+
+                        // 🔊 TEXT TO SPEECH
+                        let selectedLang = document.getElementById("languageSelect").value;
+                        msg.lang = selectedLang;
+                        msg.text = answer;
+                        synth.speak(msg);
+                    }
+                });
+            });
+        });
+    </script>
+
+</body>
+</html>

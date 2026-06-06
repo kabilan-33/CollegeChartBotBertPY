@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Chatbot</title>
+
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+
+<style>
+body {
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    background: linear-gradient(135deg, #608f95, #1a1e3b);
+    font-family: Arial;
+}
+
+.sidebar {
+    width: 260px;
+    background: linear-gradient(180deg, #1a1e3b, #2c5364);
+    color: white;
+    display: flex;
+    flex-direction: column;
+    padding: 10px;
+}
+
+#sessionList { flex: 1; overflow-y: auto; }
+
+.session-item {
+    padding: 10px;
+    margin-bottom: 5px;
+    border-radius: 8px;
+    background: rgba(255,255,255,0.05);
+    cursor: pointer;
+}
+
+.session-item:hover { background: rgba(255,255,255,0.15); }
+.session-item.active { background: rgba(255,255,255,0.3); }
+
+.delete-btn {
+    float: right;
+    color: #ff6b6b;
+}
+
+.chat-container {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.chat-box {
+    width: 60%;
+    max-width: 800px;
+    height: 90vh;
+    background: #19313c;
+    border-radius: 15px;
+    display: flex;
+    flex-direction: column;
+}
+
+.chat-header {
+    padding: 15px;
+    background: #d9edf7;
+    text-align: center;
+    font-weight: bold;
+}
+
+.chat-body {
+    flex: 1;
+    padding: 15px;
+    overflow-y: auto;
+}
+
+.user-msg { text-align: right; color: #2EFE2E; }
+.bot-msg { color: white; }
+
+.typing {
+    color: #ccc;
+    font-style: italic;
+}
+
+.chat-footer {
+    padding: 10px;
+    background: #eee;
+}
+</style>
+</head>
+
+<body>
+
+<div class="sidebar">
+    <button class="btn btn-success btn-block" onclick="newChat()">+ New Chat</button>
+    <br>
+    <div id="sessionList"></div>
+
+    <button class="btn btn-warning btn-block" onclick="toggleVoice()">🔊 Voice ON/OFF</button>
+    <br>
+
+    <a href="/logout" class="btn btn-danger btn-block">Logout</a>
+</div>
+
+<div class="chat-container">
+<div class="chat-box">
+
+<div class="chat-header">SARA Smart Campus Assistant</div>
+
+<div class="chat-body" id="chatBody"></div>
+
+<div class="chat-footer">
+
+<select id="languageSelect" class="form-control">
+<option value="en-US">English</option>
+<option value="ta-IN">Tamil</option>
+<option value="hi-IN">Hindi</option>
+</select>
+<br>
+
+<div class="input-group">
+<input type="text" id="messageText" class="form-control">
+
+<span class="input-group-btn">
+<button class="btn btn-info" onclick="sendMessage()">Send</button>
+<button class="btn btn-warning" onclick="startVoice()">🎤</button>
+</span>
+</div>
+
+</div>
+</div>
+</div>
+
+<div style="position:absolute; top:10px; right:20px;">
+<a href="/admin">
+<button style="padding:10px 15px;background:#38bdf8;border:none;border-radius:8px;color:white;">
+Admin Dashboard
+</button>
+</a>
+</div>
+
+<script>
+
+let currentSession = null;
+let voiceEnabled = true;
+let currentAudio = null;
+
+// ==========================
+// FIX AUDIO BLOCK
+// ==========================
+document.body.addEventListener("click", () => {
+    speechSynthesis.resume();
+});
+
+// ==========================
+// WELCOME
+// ==========================
+function addWelcomeMessage(){
+    $("#chatBody").append(`<div class="bot-msg">👋 Welcome to SARA Smart Campus Assistant!!! Ask anything about College Information.</div>`);
+}
+
+// ==========================
+// LOAD SESSIONS
+// ==========================
+function loadSessions(){
+    $.get("/sessions", function(data){
+        $("#sessionList").html("");
+
+        data.forEach(s=>{
+            $("#sessionList").append(`
+            <div class="session-item" onclick="openChat(event,${s.id})">
+                ${s.title}
+                <span class="delete-btn" onclick="deleteChat(event,${s.id})">❌</span>
+            </div>`);
+        });
+    });
+}
+
+// ==========================
+function newChat(){
+    $.get("/new_chat", function(data){
+        currentSession = data.id;
+        $("#chatBody").html("");
+        addWelcomeMessage();
+        loadSessions();
+    });
+}
+
+// ==========================
+function openChat(e,id){
+    $(".session-item").removeClass("active");
+    $(e.currentTarget).addClass("active");
+
+    currentSession = id;
+
+    $.get("/messages/"+id,function(data){
+        $("#chatBody").html("");
+
+        if(data.length==0) addWelcomeMessage();
+
+        data.forEach(c=>{
+            $("#chatBody").append(`<div class="user-msg">${c.m}</div>`);
+            $("#chatBody").append(`<div class="bot-msg">${c.r}</div>`);
+        });
+    });
+}
+
+// ==========================
+function deleteChat(e,id){
+    e.stopPropagation();
+    $.get("/delete/"+id, loadSessions);
+}
+
+// ==========================
+// SEND MESSAGE
+// ==========================
+function sendMessage(){
+
+let msg = $("#messageText").val().trim();
+let lang = $("#languageSelect").val();
+
+if(!msg) return;
+
+if(!currentSession){
+alert("Click New Chat first");
+return;
+}
+
+$("#chatBody").append(`<div class="user-msg">${msg}</div>`);
+$("#messageText").val("");
+
+let typingId = Date.now();
+
+$("#chatBody").append(`<div class="bot-msg typing" id="${typingId}">Typing...</div>`);
+
+$.post("/ask",{
+messageText:msg,
+session_id:currentSession,
+lang:lang
+},function(res){
+
+$("#"+typingId).remove();
+
+$("#chatBody").append(`<div class="bot-msg">${res.answer}</div>`);
+
+speak(res.answer,lang,res.audio);
+
+$("#chatBody").scrollTop($("#chatBody")[0].scrollHeight);
+
+}).fail(()=>{
+$("#"+typingId).remove();
+$("#chatBody").append(`<div class="bot-msg">⚠️ Error</div>`);
+});
+}
+
+// ==========================
+// VOICE INPUT
+// ==========================
+function startVoice(){
+
+const rec = new (window.SpeechRecognition || window.webkitSpeechRecognition)();
+
+rec.lang = $("#languageSelect").val();
+rec.interimResults = true;
+rec.continuous = false;
+
+rec.start();
+
+rec.onresult = e=>{
+$("#messageText").val(e.results[0][0].transcript);
+sendMessage();
+};
+}
+
+// ==========================
+// VOICE OUTPUT
+// ==========================
+function speak(text, lang, audio){
+
+if(!voiceEnabled) return;
+
+// stop previous audio
+if(currentAudio){
+currentAudio.pause();
+currentAudio = null;
+}
+
+speechSynthesis.cancel();
+
+if(audio){
+currentAudio = new Audio("data:audio/mp3;base64," + audio);
+currentAudio.play();
+}else{
+let msg = new SpeechSynthesisUtterance(text);
+msg.lang = "en-US";
+speechSynthesis.speak(msg);
+}
+}
+
+// ==========================
+// VOICE TOGGLE
+// ==========================
+function toggleVoice(){
+voiceEnabled = !voiceEnabled;
+alert("Voice: " + (voiceEnabled ? "ON" : "OFF"));
+}
+
+// ENTER KEY
+$("#messageText").keypress(e=>{
+if(e.which==13) sendMessage();
+});
+
+// INIT
+loadSessions();
+addWelcomeMessage();
+
+</script>
+
+</body>
+</html>
